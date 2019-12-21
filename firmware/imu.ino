@@ -42,10 +42,17 @@ void readOrientation() {
   unsigned long currentMillis = millis();
   int dt = (currentMillis-prevOrientationReading);
   prevOrientationReading = currentMillis;
+  int heading = compass.heading();
+  if(heading<180) {
+    heading=heading+180;
+  }
+  else {
+    heading=heading-180;
+  }
   
   f_angles[0] = 0.98 * (f_angles[0] + (gyro.g.x - g_zero[0]) * dt * 0.001 * gyroToRasPSFactor) + 0.02*atan2(-compass.a.x, compass.a.z);
   f_angles[1] = 0.98 * (f_angles[1] + (gyro.g.y - g_zero[1]) * dt * 0.001 * gyroToRasPSFactor) + 0.02*atan2(-compass.a.y, compass.a.z);
-  f_angles[2] = 0.98 * (f_angles[2] - (gyro.g.z - g_zero[1]) * dt * 0.001 * gyroToRasPSFactor) + 0.02*compass.heading()*DEG_TO_RAD;
+  f_angles[2] = 0.98 * (f_angles[2] - (gyro.g.z - g_zero[1]) * dt * 0.001 * gyroToRasPSFactor) + 0.02*heading*DEG_TO_RAD;
 }
 
 void sendOrientation () {
