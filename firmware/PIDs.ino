@@ -40,9 +40,9 @@ void pidReadInParams () {
       pids[pidSelection].SetTunings(pidCsts[pidSelection][0], pidCsts[pidSelection][1], pidCsts[pidSelection][2]);
       rxFlush();
     }
-    else if ((rxCmd() > 140) && (rxCmd() < 145)) { //Setpoints received over comline (141 -> 144). Argument is 1000 times wanted value.
+    else if ((rxCmd() > 140) && (rxCmd() < 145)) { //Setpoints received over comline (141 -> 144).
       int pidSelection = (buf [2] - '0');
-      pidVars[pidSelection-1][0] = (double)(rxArg()/1000);
+      pidVars[pidSelection-1][0] = (double)((rxArg()-180000)/1000);
       rxFlush();
     }
   }

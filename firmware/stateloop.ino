@@ -58,7 +58,9 @@ void stateLoop() {
   else if (state == 6) { //PID values and setpoints welcome
     pidReadInParams();
     readOrientation();
+    readAirPressure();
     sendOrientation();
+    sendPressure();
     readAdditionalThrust();
     updateESCs();
   }
@@ -75,7 +77,9 @@ void stateLoop() {
   else if (state == 10) { //USUAL FLIGHT MODE, ENGINES RUNNING
     armed = true;
     readOrientation();
+    readAirPressure();
     sendOrientation();
+    sendPressure();
     pidReadInParams();
     readAdditionalThrust();
     pidLoop();
