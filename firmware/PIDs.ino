@@ -42,7 +42,7 @@ void pidReadInParams () {
     }
     else if ((rxCmd() > 140) && (rxCmd() < 145)) { //Setpoints received over comline (141 -> 144).
       int pidSelection = (buf [2] - '0');
-      pidVars[pidSelection-1][0] = (double)((rxArg()-180000)/1000);
+      pidVars[pidSelection-1][0] = (double)((rxArg()-3142)/1000);
       rxFlush();
     }
   }
