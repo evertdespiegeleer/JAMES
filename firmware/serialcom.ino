@@ -70,7 +70,6 @@ void rxFlush() {
 
 void sendMsg(int cmd, int arg) {
   boolean argsent = false;
-  char argBuffer[15];
   for(int i=0; i<24; i++) {
     if(i<2) { //writing START
       Serial.print(standardizedMsg[i]);
