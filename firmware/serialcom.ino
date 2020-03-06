@@ -1,6 +1,6 @@
 void serial_setup () {
   Serial.begin(57600);
-  Serial.setTimeout(50);
+  Serial.setTimeout(serialTimeout);
 }
 
 char serialInBuf[24];
@@ -101,4 +101,3 @@ void sendMsg(int cmd, int arg) {
     }
   }
 }
-
