@@ -41,6 +41,7 @@ void rxLoop () {
           argBuffer[i-6] = serialInBuf[i];
         }
         arg = atoi(argBuffer);
+        sendMsg(950, arg);
       }
       else {
         cmd = 0; //CMD = 0 means no standardized message inside register.
