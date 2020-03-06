@@ -78,12 +78,11 @@ void stateLoop() {
     armed = true;
     readOrientation();
     readAirPressure();
+    pidReadInParams();
     sendOrientation();
     sendPressure();
-    pidReadInParams();
     readAdditionalThrust();
     pidLoop();
     updateESCs();
   }
 }
-

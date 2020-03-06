@@ -36,13 +36,14 @@ void pidReadInParams () {
        pidCsts[pidSelection][action] = (double)(rxArg()/100); 
       }
       pidCstsReceived[pidSelection][action] = true;
-      sendMsg(900+10*pidSelection+action, (int)pidCsts[pidSelection][action]);///////
+      // sendMsg(900+10*pidSelection+action, (int)pidCsts[pidSelection][action]);///////
       pids[pidSelection].SetTunings(pidCsts[pidSelection][0], pidCsts[pidSelection][1], pidCsts[pidSelection][2]);
       rxFlush();
     }
     else if ((rxCmd() > 140) && (rxCmd() < 145)) { //Setpoints received over comline (141 -> 144).
       int pidSelection = (buf [2] - '0');
       pidVars[pidSelection-1][0] = (double)((rxArg()-3142)/1000);
+      sendMsg(930+pidSelection-1, (int)(pidVars[pidSelection-1][0])*1000); //Send setpoint*1000 back over serial for debugging, 930 = alti, 931 = pitch...
       rxFlush();
     }
   }

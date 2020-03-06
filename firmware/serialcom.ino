@@ -51,7 +51,7 @@ void rxLoop () {
   }
 }
 
-boolean rxAvailable () {
+bool rxAvailable () {
   return (cmd != 0);
 }
 
