@@ -1,5 +1,5 @@
 //COM
-#define serialTimeout 50
+#define serialTimeout 20
 
 //SIGNALIZATION
 #define signLed1 A2 //Corresponds to L7
