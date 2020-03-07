@@ -1,7 +1,7 @@
 #include "defs.h"
 
 unsigned int state;
-boolean armed;
+bool armed;
 
 void setup() {
   state = 0;
