@@ -8,7 +8,7 @@ boolean twoWayComCheck () {
   }
   else {
     if(((int)millis() - comCheckSentTime) < 100) { //Message has to be returned in max 100ms
-      if((rxCmd() == 3) && (rxArg() == comCheckSentTime)) {
+      if((rxCmd() == 3) && ((int)rxArg() == comCheckSentTime)) {
         //Com operation successfully
         return true;
       } 
@@ -20,4 +20,3 @@ boolean twoWayComCheck () {
   }
   return false;
 }
-

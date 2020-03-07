@@ -10,7 +10,7 @@ void stateLoop() {
   armed = false; //Armed should always be set false, unless a state, i.e. 10, explicitly states it should not be.
 
   if (rxCmd() == 11) {
-    setState(rxArg());
+    setState((int)rxArg());
     rxFlush();
   }
   

@@ -6,7 +6,7 @@ void serial_setup () {
 char serialInBuf[24];
 char standardizedMsg[24] = {'g',';','0','0','0',';','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0',';','e',';'};
 unsigned int cmd = 0;
-unsigned int arg = 0;
+float arg = 0;
 
 void rxLoop () {
   bool standardizedFound = false;
@@ -44,7 +44,7 @@ void rxLoop () {
           argBuffer[i-6] = serialInBuf[i];
         }
         arg = atoi(argBuffer);
-        sendMsg(950, arg);
+        // sendMsg(950, arg);
       }
 }
 
@@ -56,7 +56,7 @@ unsigned int rxCmd () {
   return cmd;
 }
 
-unsigned int rxArg () {
+float rxArg () {
   return arg;
 }
 
