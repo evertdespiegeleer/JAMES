@@ -24,7 +24,7 @@ boolean programESCs () {
     }
     escs_programmed = true;
   }
-  else if (((programmingStart + 10000) < millis()) && escs_programmed) { //Wait another 5 seconds before moving on
+  else if (((programmingStart + 8000) < millis()) && escs_programmed) { //Wait another 8 seconds before moving on
     return true;
   }
   return false;
@@ -70,4 +70,3 @@ void updateESCs () {
     }
   }
 }
-
