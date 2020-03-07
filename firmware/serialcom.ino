@@ -9,17 +9,19 @@ unsigned int cmd = 0;
 unsigned int arg = 0;
 
 void rxLoop () {
-  if (Serial.available() > 0) {
-    //Place every byte one place forward in the register
-    for(int i=0;i<23;i++) {
-        serialInBuf[i] = serialInBuf[i+1]; //move all element to the left except first one
-    }
-    //Add read byte as last byte in the register
-    serialInBuf[23] = Serial.read();
+  bool standardizedFound = false;
 
-    
-      //Check if a standardized message is inside the register
-      boolean standardizedFound = true;
+  while((!standardizedFound) && (Serial.available() > 0)) {
+
+    // Shift entire buffer to the left and add new char
+      for(int i=0;i<23;i++) {
+        serialInBuf[i] = serialInBuf[i+1];
+      }
+      serialInBuf[23] = Serial.read();
+    // !Shift entire buffer to the left and add new char
+
+    // Check for standardized message in buffer
+    standardizedFound = true;
       for(int i=0;i<2;i++){
         if(serialInBuf[i] != standardizedMsg[i]) {
           standardizedFound = false;
@@ -30,9 +32,10 @@ void rxLoop () {
           standardizedFound = false;
         }
       }
+      // !Check for standardized message in buffer
+  }
 
-      
-      
+
       if (standardizedFound) { //Standardized msg in serialBufReadIndex.
         //read the cmd bytes into cmd
         cmd = (serialInBuf[2]-'0')*100+(serialInBuf[3]-'0')*10+(serialInBuf[4]-'0');
@@ -43,13 +46,6 @@ void rxLoop () {
         arg = atoi(argBuffer);
         sendMsg(950, arg);
       }
-      else {
-        cmd = 0; //CMD = 0 means no standardized message inside register.
-        arg = 0;
-      }
-
-      
-  }
 }
 
 bool rxAvailable () {
