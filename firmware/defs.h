@@ -17,7 +17,7 @@
 #define esc4 3
 #define disArmedMicroSeconds 500
 #define minMicroSeconds 800
-#define minMicroSecondsMotorsTurning 850
+#define minMicroSecondsMotorsTurning 860
 #define maxMicroSeconds 1800
 
 //PIDs
