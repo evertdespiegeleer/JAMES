@@ -1,3 +1,6 @@
+//Development
+#define tetheredMode true
+
 //COM
 #define serialTimeout 20
 

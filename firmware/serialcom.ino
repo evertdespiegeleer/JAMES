@@ -1,3 +1,5 @@
+unsigned long lastReceivedSerialMsgs = 0;
+
 void serial_setup () {
   Serial.begin(57600);
   Serial.setTimeout(serialTimeout);
@@ -44,6 +46,7 @@ void rxLoop () {
           argBuffer[i-6] = serialInBuf[i];
         }
         arg = atoi(argBuffer);
+        lastReceivedSerialMsgs = millis();
         // sendMsg(950, arg);
       }
 }
