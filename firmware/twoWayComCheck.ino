@@ -1,14 +1,16 @@
 unsigned int comCheckSentTime = 0;
+unsigned long comCheckSentTimeLong = 0;
 
 boolean twoWayComCheck () {
   if(comCheckSentTime == 0) {
     //Check has not been sent
-    comCheckSentTime = (unsigned int)(millis()/100);
+    comCheckSentTimeLong = (millis());
+    comCheckSentTime = (unsigned int)(comCheckSentTimeLong/100);
     sendMsg(2, comCheckSentTime);
   }
   else {
-    if(((int)millis() - comCheckSentTime) < 300) { //Message has to be returned in max 300ms
-      if((rxCmd() == 3) && ((int)rxArg() == comCheckSentTime)) {
+    if((millis() - comCheckSentTimeLong) < 300) { //Message has to be returned in max 300ms
+      if((rxCmd() == 3) && ((unsigned int)rxArg() == comCheckSentTime)) {
         //Com operation successfully
         return true;
       } 
