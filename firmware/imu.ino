@@ -83,9 +83,9 @@ double getImuAngle(int index) {
 
 boolean checkMaxAngleReached () {
   if ((abs(getImuAngle(0)) >= maxAbsoluteAngle) || (abs(getImuAngle(1)) >= maxAbsoluteAngle)) {
-    return true
+    return true;
   }
   else {
-    return false
+    return false;
   }
 }
