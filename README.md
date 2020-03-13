@@ -4,15 +4,16 @@
 
 ## :information_source: About The Project
 
-JAMES is part of a bigger project: an airborne experimental test platform I'm creating called Sparrow One. JAMES is the most low-level electronic contoller aboard. It's main purpose is to keep the craft stable in flight, and to control the power hardware. It houses the IMU and barometer among other sensors, collects measurements and controls the ESC's. JAMES takes in the desired pitch, roll, and yaw angles, the desired altitude and velocity and manipulates the engines accordingly. Control of JAMES' fligh parameters can happen either manually or automatically (by another computer aboard, called ZUES).
+JAMES is part of a bigger project: an airborne experimental test platform called Sparrow One. JAMES is the most low-level electronic contoller aboard (taking into account the ESCs). It's main purpose is to keep the craft stable in flight, and to control the power hardware. It houses the IMU and the barometer amongst other sensors, collects measurements and controls the ESCs. JAMES takes in the desired pitch, roll, and yaw angles, the desired altitude, heading and velocity and manipulates the engines accordingly. Control of JAMES' flight parameters happens either manually or automatically by another computer aboard.
 
 ## :space_invader: Technitcal
 
 ### :hammer: Electronics
 
-JAMES is ATmega328p based control board I designed and built. This repo is dedicated to the development of this boards firmware.
+JAMES is an ATmega328p based control board I designed and built. This repo is dedicated to the development of the firmware running this computer.
 
 ### :bug: Known issues and future developements
+- [ ] The code should be structured in a proper, C++ default way, instead of a the cluster of .ino files I'm using at the moment.
 - [ ] YAW control and stabilization
 - [ ] Altitude control and stabilization
 - [ ] Autonomous emergency landing
