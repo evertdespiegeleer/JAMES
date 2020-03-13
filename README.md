@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://svgshare.com/i/J9L.svg" alt="Logo" width="90000" border="0">
+    <img src="https://svgshare.com/i/J90.svg" alt="Logo" width="90000" border="0">
 <br />
 
 ## :information_source: About The Project
