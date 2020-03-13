@@ -9,13 +9,6 @@ void setState(int stateNr) {
 void stateLoop() {
   armed = false; //Armed should always be set false, unless a state, i.e. 10, explicitly states it should not be.
 
-  if(tetheredMode) { //If in tethered mode, serial communication happens over a cable. If the last message received over serial is more than 3 sec. ago, the serial connection is considered broken. unarm.
-      if (millis() >= (lastReceivedSerialMsgs + 3000)) {
-        armed = false;
-        setState(22);
-      } 
-    }
-
   if (rxCmd() == 11) {
     setState((int)rxArg());
     rxFlush();
@@ -83,6 +76,12 @@ void stateLoop() {
 
   else if (state == 10) { //USUAL FLIGHT MODE, ENGINES RUNNING
     armed = true;
+    if(tetheredMode && armed) { //If in tethered mode, serial communication happens over a cable. If the last message received over serial is more than 2 sec. ago, the serial connection is considered broken. unarm.
+      if (millis() >= (lastReceivedSerialMsgs + 2000)) {
+        armed = false;
+        setState(22);
+      } 
+    }
     readOrientation();
     readAirPressure();
     pidReadInParams();

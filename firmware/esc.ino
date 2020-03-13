@@ -61,11 +61,11 @@ void updateESCs () {
 
     for(int i=0; i<4; i++) {
       escValues[i] = min(maxMicroSeconds, max(minThrust, escValues[i]));
-      if(tetheredMode) {
-        if(thrustPartitions[4] = 0) {
+      /*if(tetheredMode) {
+        if(thrustPartitions[4] <= 0) {
           escValues[i] = minMicroSeconds;
         }
-      }
+      }*/
       escs[i].writeMicroseconds(escValues[i]);
     }
   }

@@ -26,7 +26,7 @@ void pidReadInParams () {
   if(rxAvailable()) {
     char buf [4];
     sprintf (buf, "%03i", rxCmd());
-    if((rxCmd() > 99) && (rxCmd() < 133)) { //PID parameter value received over comline. Argument is 1000 times wanted parameter.
+    if((rxCmd() > 99) && (rxCmd() < 133)) { //PID parameter value received over comline.
       int action = buf [2] - '0';
       int pidSelection = buf [1] - '0';
       if(action == 0) {
