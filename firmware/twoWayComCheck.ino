@@ -3,7 +3,7 @@ unsigned int comCheckSentTime = 0;
 boolean twoWayComCheck () {
   if(comCheckSentTime == 0) {
     //Check has not been sent
-    comCheckSentTime = (int)millis();
+    comCheckSentTime = (unsigned int)(millis()/100);
     sendMsg(2, comCheckSentTime);
   }
   else {
