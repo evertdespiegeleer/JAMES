@@ -1,5 +1,6 @@
 //Development
 #define tetheredMode true
+#define maxAbsoluteAngle 110 //Max absolute roll and pitch angle before disarming into mode 23
 
 //COM
 #define serialTimeout 20

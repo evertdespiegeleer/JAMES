@@ -83,6 +83,12 @@ void stateLoop() {
       } 
     }
     readOrientation();
+    if(tetheredMode && armed) { //If in tethered mode and exceeding the absolute maximum angle on the pitch or roll axis, disarm and go to safety mode 23.
+      if(checkMaxAngleReached()) {
+        armed = false;
+        setState(23);
+      }
+    }
     readAirPressure();
     pidReadInParams();
     sendOrientation();
