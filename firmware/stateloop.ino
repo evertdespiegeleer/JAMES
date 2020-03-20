@@ -61,6 +61,7 @@ void stateLoop() {
     readAirPressure();
     sendOrientation();
     sendPressure();
+    sendBattery();
     readAdditionalThrust();
     updateESCs();
   }
@@ -93,6 +94,7 @@ void stateLoop() {
     pidReadInParams();
     sendOrientation();
     sendPressure();
+    sendBattery();
     readAdditionalThrust();
     pidLoop();
     updateESCs();
