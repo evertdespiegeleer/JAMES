@@ -100,4 +100,8 @@ void stateLoop() {
     pidLoop();
     updateESCs();
   }
+
+  else {
+    updateESCs();
+  }
 }
