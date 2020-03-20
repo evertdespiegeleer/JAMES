@@ -1,5 +1,5 @@
 double readBattery () {
-  return (analogRead(battery)*0.021);
+  return (analogRead(battery)*analogReadingVoltageFactor);
 }
 
 void sendBattery () {

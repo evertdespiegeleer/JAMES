@@ -13,6 +13,7 @@
 
 //BATTERY
 #define battery A0
+#define analogReadingVoltageFactor 0.02102 // = 1 / 1023 * 5V * ( ( 10kO + 33kO ) / 10 kO )
 
 //ESCs
 #define esc1 9
