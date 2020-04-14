@@ -65,7 +65,7 @@ void pidsStartup () {
 }
 
 void pidLoop () {
-  if(armed) {
+  if(true) {
 
   //TODO: add altitude
   pidVars[0][1] = 0; //Input altidude
