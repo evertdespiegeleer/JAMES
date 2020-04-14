@@ -10,9 +10,12 @@ BMP180I2C bmp180(0x77);
 
 unsigned long prevOrientationReading;
 
+int fullLoopSumNr;
+int prevReadHeading;
+
 float g_zero[3]; //zero values for {gyro.g.x, gyro.g.y, gyro.g.z}
 
-double f_angles[3] = {0,0,0}; //{pitch, roll,yaw} //FILTERED angles
+double f_angles[3] = {0,0,0}; //{pitch, roll, continuous_yaw} //FILTERED angles, 
 float pressure;
 
 void setupImu() {
@@ -28,7 +31,8 @@ void setupImu() {
 
 void calibrateG (int cycles, unsigned int nextState) { //Gyro calibration
   float errorSums[3] = {0,0,0};
-  for(int i; i<cycles; i++) {
+  for(int i = 0; i<cycles; i++) {
+    sendMsg(976, i);
     gyro.read();
     errorSums[0] += gyro.g.x;
     errorSums[1] += gyro.g.y;
@@ -48,6 +52,11 @@ void readOrientation() {
   unsigned long currentMillis = millis();
   int dt = (currentMillis-prevOrientationReading);
   prevOrientationReading = currentMillis;
+  
+  f_angles[0] = 0.98 * (f_angles[0] + (gyro.g.x - g_zero[0]) * dt * 0.001 * gyroToRadsPerSecFactor) + 0.02*atan2(-compass.a.x, compass.a.z);
+  f_angles[1] = 0.98 * (f_angles[1] + (gyro.g.y - g_zero[1]) * dt * 0.001 * gyroToRadsPerSecFactor) + 0.02*atan2(-compass.a.y, compass.a.z);
+
+
   int heading = compass.heading();
   if(heading<180) {
     heading=heading+180;
@@ -56,9 +65,16 @@ void readOrientation() {
     heading=heading-180;
   }
   
-  f_angles[0] = 0.98 * (f_angles[0] + (gyro.g.x - g_zero[0]) * dt * 0.001 * gyroToRadsPerSecFactor) + 0.02*atan2(-compass.a.x, compass.a.z);
-  f_angles[1] = 0.98 * (f_angles[1] + (gyro.g.y - g_zero[1]) * dt * 0.001 * gyroToRadsPerSecFactor) + 0.02*atan2(-compass.a.y, compass.a.z);
-  f_angles[2] = 0.98 * (f_angles[2] - (gyro.g.z - g_zero[1]) * dt * 0.001 * gyroToRadsPerSecFactor) + 0.02*heading*DEG_TO_RAD;
+  if ((heading - prevReadHeading) >= 300) {
+    fullLoopSumNr = fullLoopSumNr - 1;
+  }
+  else if ((heading - prevReadHeading) <= -300) {
+    fullLoopSumNr = fullLoopSumNr + 1;
+  }
+  f_angles[2] = 0.98 * (f_angles[2] - (gyro.g.z - g_zero[1]) * dt * 0.001 * gyroToRadsPerSecFactor) + 0.02 * (fullLoopSumNr * 360 + heading) * DEG_TO_RAD;
+  prevReadHeading = heading;
+
+  
 }
 
 void readAirPressure () {
@@ -68,9 +84,9 @@ void readAirPressure () {
 }
 
 void sendOrientation () {
-  sendMsg(600, (int)(f_angles[0]*1000+7000));
-  sendMsg(601, (int)(f_angles[1]*1000+7000));
-  sendMsg(602, (int)(f_angles[2]*1000+7000));
+  sendMsg(600, (int)(getImuAngle(0)*1000+7000));
+  sendMsg(601, (int)(getImuAngle(1)*1000+7000));
+  sendMsg(602, (int)((getImuAngle(2) - fullLoopSumNr * 360 * DEG_TO_RAD)*1000+7000));
 }
 
 void sendPressure () {
@@ -86,6 +102,6 @@ boolean checkMaxAngleReached () {
     return true;
   }
   else {
-    return false;
-  }
+int getFullLoopSumNr () {
+  return fullLoopSumNr;
 }
