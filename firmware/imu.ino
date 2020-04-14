@@ -98,10 +98,9 @@ double getImuAngle(int index) {
 }
 
 boolean checkMaxAngleReached () {
-  if ((abs(getImuAngle(0)) >= maxAbsoluteAngle) || (abs(getImuAngle(1)) >= maxAbsoluteAngle)) {
-    return true;
-  }
-  else {
+  return ((abs(getImuAngle(0)) >= maxAbsoluteAngle) || (abs(getImuAngle(1)) >= maxAbsoluteAngle));
+}
+
 int getFullLoopSumNr () {
   return fullLoopSumNr;
 }
