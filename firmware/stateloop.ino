@@ -16,7 +16,7 @@ void stateLoop() {
   
   
   if (state == 0) { //Boot
-    if(readBattery() > 4) {
+    if((readBattery() > 4) && false) {
       setState(19);
     }
     else {
