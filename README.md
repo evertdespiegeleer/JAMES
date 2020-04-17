@@ -14,7 +14,6 @@ JAMES is an ATmega328p based control board I designed and built. This repo is de
 
 ### :bug: Known issues and future developements
 - [ ] The code should be structured in a proper, C++ default way, instead of a the cluster of .ino files I'm using at the moment.
-- [ ] YAW control and stabilization
 - [ ] Altitude control and stabilization
 - [ ] Autonomous emergency landing
 - [ ] ZEUS autonomous mission capabilities (JAMES is mostly ready for this at this point, although completely autonomous flight has not been tested as ZEUS still has a long way to go.)
