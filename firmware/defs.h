@@ -22,8 +22,11 @@
 #define esc4 3
 #define disArmedMicroSeconds 500
 #define minMicroSeconds 800
-#define minMicroSecondsMotorsTurning 860
+#define minMicroSecondsMotorsTurning 870
 #define maxMicroSeconds 1800
 
 //PIDs
 #define pidSampleTime 20 //ms
+
+//HOP
+#define hopEngineSpinupTime 500 //ms ==> When performing a hop, this variable indicated how long the engines should spin up to minMicroSecondsMotorsTurning, before performing the actual hop.
