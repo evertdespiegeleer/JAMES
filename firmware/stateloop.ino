@@ -101,6 +101,10 @@ void stateLoop() {
     updateESCs();
   }
 
+  else if (state == 16) {
+    hopLoop();
+  }
+
   else {
     updateESCs();
   }
