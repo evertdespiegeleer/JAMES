@@ -44,34 +44,29 @@ void setThrustPartition(int index, int value) {
 void updateESCs () {
   if(armed) {
     //TODO: ADD YAW
-    int escValues[4] = { minMicroSeconds + thrustPartitions[0] + thrustPartitions[4] + thrustPartitions[1] + thrustPartitions[2],
-    minMicroSeconds + thrustPartitions[0] + thrustPartitions[4] + thrustPartitions[1] - thrustPartitions[2],
-    minMicroSeconds + thrustPartitions[0] + thrustPartitions[4] - thrustPartitions[1] - thrustPartitions[2],
-    minMicroSeconds + thrustPartitions[0] + thrustPartitions[4] - thrustPartitions[1] + thrustPartitions[2] };
+    int escValues[4] = {
+    minMicroSeconds + thrustPartitions[0] + thrustPartitions[4] + thrustPartitions[1] + thrustPartitions[2] - thrustPartitions[3],
+    minMicroSeconds + thrustPartitions[0] + thrustPartitions[4] + thrustPartitions[1] - thrustPartitions[2] + thrustPartitions[3],
+    minMicroSeconds + thrustPartitions[0] + thrustPartitions[4] - thrustPartitions[1] - thrustPartitions[2] - thrustPartitions[3],
+    minMicroSeconds + thrustPartitions[0] + thrustPartitions[4] - thrustPartitions[1] + thrustPartitions[2] + thrustPartitions[3]
+    };
     
-    int minThrust = minMicroSeconds;
-    for(int i=0; i<4; i++) {
-      minThrust = max(minThrust, escValues[i]);
-    }
-    if(minThrust>=minMicroSecondsMotorsTurning) {
-      minThrust = minMicroSecondsMotorsTurning;
-    } else {
-      minThrust = minMicroSeconds;
-    }
 
     for(int i=0; i<4; i++) {
-      escValues[i] = min(maxMicroSeconds, max(minThrust, escValues[i]));
+      escValues[i] = min(maxMicroSeconds, max(minMicroSecondsMotorsTurning, escValues[i]));
       /*if(tetheredMode) {
         if(thrustPartitions[4] <= 0) {
           escValues[i] = minMicroSeconds;
         }
       }*/
       escs[i].writeMicroseconds(escValues[i]);
+      sendMsg(620 + i, escValues[i]-minMicroSeconds);
     }
   }
   else {
     for(int i=0; i<4; i++) {
-      escs[i].writeMicroseconds(disArmedMicroSeconds);
+      escs[i].writeMicroseconds(minMicroSeconds);
+      sendMsg(620 + i, 0);
     }
   }
 }

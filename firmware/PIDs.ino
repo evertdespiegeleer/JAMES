@@ -58,7 +58,7 @@ void pidReadInParams () {
 
 void pidsStartup () {
   for(int i = 0; i<4; i++) { //Turn on all pids
-    pids[i].SetOutputLimits(-maxMicroSeconds,maxMicroSeconds);
+    pids[i].SetOutputLimits(-(maxMicroSeconds - minMicroSeconds) * 0.5, (maxMicroSeconds - minMicroSeconds) * 0.5);
     pids[i].SetSampleTime(pidSampleTime);
     pids[i].SetMode(AUTOMATIC);
   }

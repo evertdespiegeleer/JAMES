@@ -9,7 +9,7 @@
 #define signLed1 A2 //Corresponds to L7
 #define signLed3 A3 //Corresponds to L8
 #define signLed9 A1 //Corresponds to L6
-#define blinkPeriod 500 //ms
+#define blinkPeriod 200 //ms
 
 //BATTERY
 #define battery A0

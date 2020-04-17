@@ -56,14 +56,27 @@ void stateLoop() {
   }
 
   else if (state == 6) { //PID values and setpoints welcome
-    armed = false;
+     armed = false;
+    if(tetheredMode && armed) { //If in tethered mode, serial communication happens over a cable. If the last message received over serial is more than 2 sec. ago, the serial connection is considered broken. unarm.
+      if (millis() >= (lastReceivedSerialMsgs + 2000)) {
+        armed = false;
+        setState(22);
+      } 
+    }
     readOrientation();
+    if(tetheredMode && armed) { //If in tethered mode and exceeding the absolute maximum angle on the pitch or roll axis, disarm and go to safety mode 23.
+      if(checkMaxAngleReached()) {
+        armed = false;
+        setState(23);
+      }
+    }
     readAirPressure();
     pidReadInParams();
     sendOrientation();
     sendPressure();
     sendBattery();
     readAdditionalThrust();
+    pidLoop();
     updateESCs();
   }
 
@@ -78,7 +91,7 @@ void stateLoop() {
 
   else if (state == 10) { //USUAL FLIGHT MODE, ENGINES RUNNING
     armed = true;
-    if(tetheredMode && armed) { //If in tethered mode, serial communication happens over a cable. If the last message received over serial is more than 2 sec. ago, the serial connection is considered broken. unarm.
+    if(tetheredMode && armed) { //dIf in tethered mode, serial communication happens over a cable. If the last message received over serial is more than 2 sec. ago, the serial connection is considered broken. unarm.
       if (millis() >= (lastReceivedSerialMsgs + 2000)) {
         armed = false;
         setState(22);
