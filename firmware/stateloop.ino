@@ -77,6 +77,7 @@ void stateLoop() {
     sendBattery();
     readAdditionalThrust();
     pidLoop();
+    resetWindup();
     updateESCs();
   }
 
