@@ -21,10 +21,10 @@ void rxLoop () {
   while((!standardizedFound) && (Serial.available() > 0)) {
 
     // Shift entire buffer to the left and add new char
-      for(int i=0;i<23;i++) {
+      for(int i=0;i<totalFormatedMsgLength-1;i++) {
         serialInBuf[i] = serialInBuf[i+1];
       }
-      serialInBuf[23] = Serial.read();
+      serialInBuf[totalFormatedMsgLength-1] = Serial.read();
     // !Shift entire buffer to the left and add new char
 
     // Check for standardized message in buffer
@@ -34,20 +34,21 @@ void rxLoop () {
           standardizedFound = false;
         }
       }
-      for(int i=22;i<24;i++){
+      /*for(int i=22;i<24;i++){
         if(serialInBuf[i] != standardizedMsg[i]) {
           standardizedFound = false;
         }
-      }
+      }*/
       // !Check for standardized message in buffer
   }
+  
 
 
       if (standardizedFound) { //Standardized msg in serialBufReadIndex.
         //read the cmd bytes into cmd
         cmd = (serialInBuf[2]-'0')*100+(serialInBuf[3]-'0')*10+(serialInBuf[4]-'0');
-        char argBuffer [15];
-        for(int i = 6; i < 21; i++) { //read the argument bytes into arg
+        char argBuffer [argMsgLength];
+        for(int i = 2+1+cmdMsgLength; i < 2+1+cmdMsgLength+argMsgLength; i++) { //read the argument bytes into arg
           argBuffer[i-6] = serialInBuf[i];
         }
         arg = atoi(argBuffer);
