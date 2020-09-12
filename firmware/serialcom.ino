@@ -5,15 +5,15 @@ void serial_setup () {
   Serial.setTimeout(serialTimeout);
 }
 
-char serialInBuf[24];
-char standardizedMsg[24] = {'g',';','0','0','0',';','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0',';','e',';'};
+char serialInBuf[14];
+char standardizedMsg[14] = {'g',';','0','0','0',';','0','0','0','0','0',';','e',';'};
 unsigned int cmd = 0;
 float arg = 0;
 
 #define cmdMsgLength 3
-#define argMsgLength 15
+#define argMsgLength 5
 #define totalFormatedMsgLength (2+cmdMsgLength+1+argMsgLength+3)
-#define msgFormater "g;%03d;%015d;e;"
+#define msgFormater "g;%03d;%05d;e;"
 
 void rxLoop () {
   bool standardizedFound = false;
