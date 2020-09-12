@@ -10,6 +10,11 @@ char standardizedMsg[24] = {'g',';','0','0','0',';','0','0','0','0','0','0','0',
 unsigned int cmd = 0;
 float arg = 0;
 
+#define cmdMsgLength 3
+#define argMsgLength 15
+#define totalFormatedMsgLength (2+cmdMsgLength+1+argMsgLength+3)
+#define msgFormater "g;%03d;%015d;e;"
+
 void rxLoop () {
   bool standardizedFound = false;
 
@@ -68,35 +73,8 @@ void rxFlush() {
   arg = 0;
 }
 
-void sendMsg(int cmd, int arg) {
-  bool argsent = false;
-  for(int i=0; i<24; i++) {
-    if(i<2) { //writing START
-      Serial.print(standardizedMsg[i]);
-    }
-    else if (i == 2) { //Writing CMD
-      if(cmd<100) {
-        Serial.print('0');
-      }
-      if(cmd<10) {
-        Serial.print('0');
-      }
-      Serial.print(cmd,DEC);
-      Serial.print(';');
-    }
-    else if ((i > 5) && (i < 21)) { //Writing arguments
-      if(arg<pow(10,15-(i-5))) {
-        Serial.print('0');
-      }
-      else {
-        if(!argsent) {
-          Serial.print(arg,DEC);
-          argsent = true;
-        }
-      }
-    }
-    else if (i>20) {
-      Serial.print(standardizedMsg[i]);
-    }
-  }
+char msgToSendFormated[totalFormatedMsgLength];
+void sendMsg(int _cmd, int _arg) {
+ sprintf(msgToSendFormated, msgFormater, _cmd, _arg);
+ Serial.print(msgToSendFormated);
 }
