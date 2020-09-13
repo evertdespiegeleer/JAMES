@@ -56,7 +56,6 @@ void stateLoop() {
   }
 
   else if (state == 6) { //PID values and setpoints welcome
-    armed = false;
     readOrientation();
     readAirPressure();
     pidReadInParams();
