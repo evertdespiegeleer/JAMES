@@ -17,6 +17,8 @@ float g_zero[3]; //zero values for {gyro.g.x, gyro.g.y, gyro.g.z}
 
 double f_angles[3] = {0,0,0}; //{pitch, roll, continuous_yaw} //FILTERED angles, 
 float pressure;
+float pitchGyroGain = 0.98;
+float rollGyroGain = 0.98;
 
 void setupImu() {
   Wire.begin();
@@ -45,6 +47,19 @@ void calibrateG (int cycles, unsigned int nextState) { //Gyro calibration
   setState(nextState);
 }
 
+void checkNewFilterGains() {
+  if(rxAvailable()) {
+    if(rxCmd() == 181) {
+      pitchGyroGain = (rxArg()/100);
+      rxFlush();
+    }
+    else if (rxCmd() == 182) {
+      rollGyroGain = (rxArg()/100);
+      rxFlush();
+    }
+  }
+}
+
 void readOrientation() {
   gyro.read();
   compass.read();
@@ -52,9 +67,14 @@ void readOrientation() {
   unsigned long currentMillis = millis();
   int dt = (currentMillis-prevOrientationReading);
   prevOrientationReading = currentMillis;
-  
-  f_angles[0] = 0.98 * (f_angles[0] + (gyro.g.x - g_zero[0]) * dt * 0.001 * gyroToRadsPerSecFactor) + 0.02*atan2(-compass.a.x, compass.a.z);
-  f_angles[1] = 0.98 * (f_angles[1] + (gyro.g.y - g_zero[1]) * dt * 0.001 * gyroToRadsPerSecFactor) + 0.02*atan2(-compass.a.y, compass.a.z);
+
+
+  sendMsg(970, atan2(-compass.a.x, compass.a.z) * 1000 + 4000); //DEBUG
+  sendMsg(971, (gyro.g.x - g_zero[0]) * gyroToRadsPerSecFactor * 1000 + 4000); //DEBUG
+
+
+  f_angles[0] = pitchGyroGain * (f_angles[0] + (gyro.g.x - g_zero[0]) * dt * 0.001 * gyroToRadsPerSecFactor) + (1-pitchGyroGain) * atan2(-compass.a.x, compass.a.z); //pitch
+  f_angles[1] = rollGyroGain * (f_angles[1] + (gyro.g.y - g_zero[1]) * dt * 0.001 * gyroToRadsPerSecFactor) + (1-rollGyroGain) * atan2(-compass.a.y, compass.a.z); //roll
 
 
   int heading = compass.heading();
@@ -71,7 +91,7 @@ void readOrientation() {
   else if ((heading - prevReadHeading) <= -300) {
     fullLoopSumNr = fullLoopSumNr + 1;
   }
-  f_angles[2] = 0.98 * (f_angles[2] - (gyro.g.z - g_zero[1]) * dt * 0.001 * gyroToRadsPerSecFactor) + 0.02 * (fullLoopSumNr * 360 + heading) * DEG_TO_RAD;
+  f_angles[2] = 0.95 * (f_angles[2] - (gyro.g.z - g_zero[2]) * dt * 0.001 * gyroToRadsPerSecFactor) + 0.05 * (fullLoopSumNr * 360 + heading) * DEG_TO_RAD;
   prevReadHeading = heading;
 
   

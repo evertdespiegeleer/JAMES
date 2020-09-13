@@ -95,6 +95,7 @@ void stateLoop() {
     }
     readAirPressure();
     pidReadInParams();
+    checkNewFilterGains();
     sendOrientation();
     sendPressure();
     sendBattery();
