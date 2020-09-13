@@ -74,7 +74,7 @@ void rxFlush() {
   arg = 0;
 }
 
-char msgToSendFormated[totalFormatedMsgLength];
+char msgToSendFormated[totalFormatedMsgLength+1];
 void sendMsg(int _cmd, int _arg) {
  sprintf(msgToSendFormated, msgFormater, _cmd, _arg);
  Serial.print(msgToSendFormated);
