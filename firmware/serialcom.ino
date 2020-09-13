@@ -5,7 +5,6 @@ void serial_setup () {
   Serial.setTimeout(serialTimeout);
 }
 
-char serialInBuf[14];
 char standardizedMsg[14] = {'g',';','0','0','0',';','0','0','0','0','0',';','e',';'};
 unsigned int cmd = 0;
 float arg = 0;
@@ -14,6 +13,8 @@ float arg = 0;
 #define argMsgLength 5
 #define totalFormatedMsgLength (2+cmdMsgLength+1+argMsgLength+3)
 #define msgFormater "g;%03d;%05d;e;"
+
+char serialInBuf[totalFormatedMsgLength];
 
 void rxLoop () {
   bool standardizedFound = false;
@@ -34,11 +35,11 @@ void rxLoop () {
           standardizedFound = false;
         }
       }
-      /*for(int i=22;i<24;i++){
+      for(int i=totalFormatedMsgLength-2;i<totalFormatedMsgLength;i++){
         if(serialInBuf[i] != standardizedMsg[i]) {
           standardizedFound = false;
         }
-      }*/
+      }
       // !Check for standardized message in buffer
   }
   
