@@ -54,6 +54,7 @@ void rxLoop () {
         }
         arg = atoi(argBuffer);
         lastReceivedSerialMsgs = millis();
+        if(rxArg () == 777) rxFlush(); // 777 is a heartbeat message with the sole purpose of updating lastReceivedSerialMsgs.
         // sendMsg(950, arg);
       }
 }
