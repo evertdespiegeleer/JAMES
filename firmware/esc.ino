@@ -3,6 +3,7 @@
 Servo escs[4];
 
 int thrustPartitions[5]; //{altitude, pitch, roll, yaw, additional_thrust}
+int escValues[4];
 
 unsigned long programmingStart = 0;
 boolean escs_programmed = false;
@@ -44,12 +45,10 @@ void setThrustPartition(int index, int value) {
 void updateESCs () {
   if(armed) {
     //TODO: ADD YAW
-    int escValues[4] = {
-    minMicroSeconds + thrustPartitions[0] + thrustPartitions[4] + thrustPartitions[1] + thrustPartitions[2] - thrustPartitions[3],
-    minMicroSeconds + thrustPartitions[0] + thrustPartitions[4] + thrustPartitions[1] - thrustPartitions[2] + thrustPartitions[3],
-    minMicroSeconds + thrustPartitions[0] + thrustPartitions[4] - thrustPartitions[1] - thrustPartitions[2] - thrustPartitions[3],
-    minMicroSeconds + thrustPartitions[0] + thrustPartitions[4] - thrustPartitions[1] + thrustPartitions[2] + thrustPartitions[3]
-    };
+    escValues[0] = minMicroSeconds + thrustPartitions[0] + thrustPartitions[4] + thrustPartitions[1] + thrustPartitions[2] - thrustPartitions[3];
+    escValues[1] = minMicroSeconds + thrustPartitions[0] + thrustPartitions[4] + thrustPartitions[1] - thrustPartitions[2] + thrustPartitions[3];
+    escValues[2] = minMicroSeconds + thrustPartitions[0] + thrustPartitions[4] - thrustPartitions[1] - thrustPartitions[2] - thrustPartitions[3];
+    escValues[3] = minMicroSeconds + thrustPartitions[0] + thrustPartitions[4] - thrustPartitions[1] + thrustPartitions[2] + thrustPartitions[3];
     
 
     for(int i=0; i<4; i++) {
@@ -60,13 +59,22 @@ void updateESCs () {
         }
       }*/
       escs[i].writeMicroseconds(escValues[i]);
-      sendMsg(620 + i, escValues[i]-minMicroSeconds);
     }
   }
   else {
     for(int i=0; i<4; i++) {
       escs[i].writeMicroseconds(minMicroSeconds);
-      sendMsg(620 + i, 0);
     }
+  }
+}
+
+void sendESCVals() {
+  for(int i=0; i<4; i++) {
+      if (armed) {
+        sendMsg(620 + i, escValues[i]-minMicroSeconds);
+      }
+      else {
+        sendMsg(620 + i, 0);
+      }
   }
 }

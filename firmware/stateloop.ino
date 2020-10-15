@@ -1,4 +1,5 @@
 unsigned int prevState = 0;
+unsigned int lastReportCycles = 0;
 void setState(int stateNr) {
   prevState = state;
   state = stateNr;
@@ -60,9 +61,18 @@ void stateLoop() {
     readAirPressure();
     pidReadInParams();
     checkNewFilterGains();
-    sendOrientation();
-    sendPressure();
-    sendBattery();
+    if(lastReportCycles >= reportPerXCycles-1){
+      sendOrientation();
+      sendPressure();
+      sendBattery();
+      sendPidOutputs();
+      sendESCVals();
+      lastReportCycles = 0;
+    }
+    else {
+      lastReportCycles++;
+    }
+    pingLoop();
     readAdditionalThrust();
     pidLoop();
     resetWindup();
@@ -96,9 +106,18 @@ void stateLoop() {
     readAirPressure();
     pidReadInParams();
     checkNewFilterGains();
-    sendOrientation();
-    sendPressure();
-    sendBattery();
+    if(lastReportCycles >= reportPerXCycles-1){
+      sendOrientation();
+      sendPressure();
+      sendBattery();
+      sendPidOutputs();
+      sendESCVals();
+      lastReportCycles = 0;
+    }
+    else {
+      lastReportCycles++;
+    }
+    pingLoop();
     readAdditionalThrust();
     pidLoop();
     updateESCs();

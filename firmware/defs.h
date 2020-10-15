@@ -30,3 +30,5 @@
 
 //HOP
 #define hopEngineSpinupTime 500 //ms ==> When performing a hop, this variable indicated how long the engines should spin up to minMicroSecondsMotorsTurning, before performing the actual hop.
+
+#define reportPerXCycles 10

@@ -116,7 +116,7 @@ void pidReadInParams () {
     if((rxCmd() > 99) && (rxCmd() < 133)) { //PID parameter value received over comline.
       int action = buf [2] - '0';
       int pidSelection = buf [1] - '0';
-      if(action == 0) {
+      if(action == 0 || action == 1) {
         pidCsts[pidSelection][action] = (rxArg());
       }
       else {
@@ -179,4 +179,10 @@ void pidLoop () {
   setThrustPartition(1, pids[1].getOutput());
   setThrustPartition(2, pids[2].getOutput());
   setThrustPartition(3, pids[3].getOutput());
+}
+
+void sendPidOutputs() {
+  for(int i = 0; i<4; i++) {
+    sendMsg(610 + i, (int)(pids[i].getOutput() + 5000));
+  }
 }

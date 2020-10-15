@@ -76,8 +76,19 @@ void rxFlush() {
   arg = 0;
 }
 
+unsigned int lastPingCycles = 0;
+void pingLoop() {
+  if(lastPingCycles >= 2) {
+    sendMsg(683,0);
+    lastPingCycles = 0;
+  } else {
+    lastPingCycles++;
+  }
+}
+
 char msgToSendFormated[totalFormatedMsgLength+1];
 void sendMsg(int _cmd, int _arg) {
- sprintf(msgToSendFormated, msgFormater, _cmd, _arg);
- Serial.print(msgToSendFormated);
+ // sprintf(msgToSendFormated, msgFormater, _cmd, _arg);
+ // Serial.print(msgToSendFormated);
+ Serial.print("g;");Serial.print(_cmd);Serial.print(';');Serial.print(_arg);Serial.print(";e;");
 }
