@@ -9,8 +9,8 @@ class PID {
     float fbInput;
     float output;
     float Kp;
-    float Ki;
-    float Kd;
+    float Ti;
+    float Td;
 
     unsigned long previousTime;
     float prevError;
@@ -21,12 +21,12 @@ class PID {
     float sampleTime;
 
   public:
-    PID (float setpointRef, float fbInputRef, float KpCst, float KiCst, float KdCst) {
+    PID (float setpointRef, float fbInputRef, float KpCst, float TiCst, float TdCst) {
       setpoint = setpointRef;
       fbInput = fbInputRef;
       Kp = KpCst;
-      Ki = KiCst;
-      Kd = KdCst;
+      Ti = TiCst;
+      Td = TdCst;
       previousTime = millis();
     }
 
@@ -38,7 +38,7 @@ class PID {
         cumError += error * elapsedTime;
         errorRate = (error - prevError)/elapsedTime;
 
-        float tempOutput = Kp * error + Ki * cumError + Kd * errorRate;
+        float tempOutput = Kp * (error + 1/Ti * cumError + Td * errorRate); //Ideal PID
         output = max(outputMin, min(outputMax, tempOutput));
 
         prevError = error;
@@ -46,10 +46,10 @@ class PID {
       }
     }
 
-    void SetTunings (float KpCst, float KiCst, float KdCst) {
+    void SetTunings (float KpCst, float TiCst, float TdCst) {
       Kp = KpCst;
-      Ki = KiCst;
-      Kd = KdCst;
+      Ti = TiCst;
+      Td = TdCst;
     }
 
     void SetOutputLimits (float min, float max) {
@@ -86,7 +86,7 @@ class PID {
 // ! PID class
 
 // Main array: {altitude, pitch, roll, yaw}
-float pidCsts [4][3]; // Child array: {Kp, Ki, Kd}
+float pidCsts [4][3]; // Child array: {Kp, Ki, Td}
 float pidVars [4][3]; // Child array: {setpoint, input, output}
 
 //Specify the links and initial tuning parameters
