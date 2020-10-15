@@ -172,7 +172,6 @@ void pidLoop () {
 
   for(int i = 0; i<4; i++) { //Compute all PID output values
     pids[i].Compute();
-    sendMsg(610 + i, (int)(pids[i].getOutput() + 5000));
   }
 
   setThrustPartition(0, pids[0].getOutput());
