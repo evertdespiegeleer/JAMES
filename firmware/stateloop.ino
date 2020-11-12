@@ -1,10 +1,35 @@
 unsigned int prevState = 0;
-unsigned int lastReportCycles = 0;
+unsigned int lastReportCycles = 0; // Number cycles between 0 and (reportPerXCycles - 1). Increments every machine loop
 void setState(int stateNr) {
   prevState = state;
   state = stateNr;
   sign_set();
   sendMsg(10, stateNr);
+}
+
+void reportCycleLoop () {
+    if(lastReportCycles >= reportPerXCycles-1){
+      lastReportCycles = 0;
+    }
+    else {
+      if(lastReportCycles == cycleNrOrientationReport) {
+        sendOrientation(); 
+      }
+      if(lastReportCycles == cycleNrPressureReport) {
+        sendPressure(); 
+      }
+      if(lastReportCycles == cycleNrBatteryReport) {
+        sendBattery(); 
+      }
+      if(lastReportCycles == cycleNrPIDOutputsReport) {
+        sendPidOutputs(); 
+      }
+      if(lastReportCycles == cycleNrESCValsReport) {
+        sendESCVals(); 
+      }
+      lastReportCycles++;
+    }
+    pingLoop();
 }
 
 void stateLoop() {
@@ -61,18 +86,7 @@ void stateLoop() {
     readAirPressure();
     pidReadInParams();
     checkNewFilterGains();
-    if(lastReportCycles >= reportPerXCycles-1){
-      sendOrientation();
-      sendPressure();
-      sendBattery();
-      sendPidOutputs();
-      sendESCVals();
-      lastReportCycles = 0;
-    }
-    else {
-      lastReportCycles++;
-    }
-    pingLoop();
+    reportCycleLoop();
     readAdditionalThrust();
     pidLoop();
     resetWindup();
@@ -106,18 +120,7 @@ void stateLoop() {
     readAirPressure();
     pidReadInParams();
     checkNewFilterGains();
-    if(lastReportCycles >= reportPerXCycles-1){
-      sendOrientation();
-      sendPressure();
-      sendBattery();
-      sendPidOutputs();
-      sendESCVals();
-      lastReportCycles = 0;
-    }
-    else {
-      lastReportCycles++;
-    }
-    pingLoop();
+    reportCycleLoop();
     readAdditionalThrust();
     pidLoop();
     updateESCs();

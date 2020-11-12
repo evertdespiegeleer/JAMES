@@ -78,7 +78,7 @@ void rxFlush() {
 
 unsigned int lastPingCycles = 0;
 void pingLoop() {
-  if(lastPingCycles >= 2) {
+  if(lastPingCycles >= (pCX-1)) {
     sendMsg(683,0);
     lastPingCycles = 0;
   } else {

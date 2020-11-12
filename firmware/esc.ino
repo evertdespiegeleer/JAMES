@@ -10,22 +10,27 @@ boolean escs_programmed = false;
 
 boolean programESCs () {
   if(programmingStart == 0) { //Send high value
-  escs[0].attach(esc1);
-  escs[1].attach(esc2);
-  escs[2].attach(esc3);
-  escs[3].attach(esc4);
-  for(int i=0; i<4; i++) {
-    escs[i].writeMicroseconds(maxMicroSeconds);
-  }
+    escs[0].attach(esc1);
+    escs[1].attach(esc2);
+    escs[2].attach(esc3);
+    escs[3].attach(esc4);
+    for(int i=0; i<4; i++) {
+      escs[i].writeMicroseconds(maxMicroSeconds);
+    }
   programmingStart = millis();
   }
-  else if (((programmingStart + 5000) < millis()) && !escs_programmed) { //Wait 5 seconds before sending low value
+  else if ((millis() > (programmingStart + 3000)) && !escs_programmed) { //Wait 3 seconds before sending low value
+    int secsScinceLowValueStarted = (millis() - programmingStart - 5000)/800; //Set one esc per 800ms low
     for(int i=0; i<4; i++) {
-      escs[i].writeMicroseconds(minMicroSeconds);
+      if(i == secsScinceLowValueStarted) {
+        escs[secsScinceLowValueStarted].writeMicroseconds(minMicroSeconds);
+        if(secsScinceLowValueStarted == 3) {
+          escs_programmed = true;
+        }
+      }
     }
-    escs_programmed = true;
   }
-  else if (((programmingStart + 8000) < millis()) && escs_programmed) { //Wait another 8 seconds before moving on
+  else if (((programmingStart + 10000) < millis()) && escs_programmed) { //Wait another 10 seconds before moving on
     return true;
   }
   return false;

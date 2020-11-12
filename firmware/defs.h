@@ -27,8 +27,17 @@
 
 //PIDs
 #define pidSampleTime 20 //ms
+#define PIDerrorRateLPFFactor 0.9
 
 //HOP
 #define hopEngineSpinupTime 500 //ms ==> When performing a hop, this variable indicated how long the engines should spin up to minMicroSecondsMotorsTurning, before performing the actual hop.
 
-#define reportPerXCycles 10
+#define reportPerXCycles 12 // Has to be multiple of pingsPerReportCycle
+#define pingsPerReportCycle 4 // Report every 12/4 cycles
+
+#define pCX (reportPerXCycles / pingsPerReportCycle)
+#define cycleNrOrientationReport 1
+#define cycleNrPressureReport 2
+#define cycleNrBatteryReport 5
+#define cycleNrPIDOutputsReport 7
+#define cycleNrESCValsReport 10
